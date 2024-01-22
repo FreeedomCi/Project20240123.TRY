@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+	.card-img-top {
+		height: 300px; 
+		object-fit: cover;
+	}
+</style>
+
+<h1>景點介紹</h1>
+
+<div class="row row-cols-1 row-cols-md-2 g-4" id="map"></div>
+
+
+
+
+
+@section Scripts{
+    <script src="~/js/travel.js"></script>
+    <script>
+		console.log(spots.CommonFormat.Section);
+		console.log(spots.CommonFormat.Section[0].file.img[0].text);
+
+		const target = document.querySelector('#map');
+
+		let createhtml = (all = {})=> {
+			let RowNumber = all.RowNumber;
+			let REF_WP = all.REF_WP;
+			let CAT1 = all.CAT1;
+			let CAT2 = all.CAT2;
+			let SERIAL_NO = all.SERIAL_NO;
+			let MEMO_TIME = all.MEMO_TIME;
+			let stitle = all.stitle;
+			let xbody = all.xbody;
+			let avBegin = all.avBegin;
+			let avEnd = all.avEnd;
+			let idpt = all.idpt;
+			let xurl = all.xurl;
+			let address = all.address;
+			let xpostDate = all.xpostDate;
+			let file = all.file.img[0].text;
+			let langinfo = all.langinfo;
+			let POI = all.POI;
+			let info = all.info;
+			let longitude = all.longitude;
+			let latitude = all.latitude;
+			let MRT = all.MRT;
+			let template = `
+				<div class="col">
+					<div class="card">
+						<div class="img">
+							<img src="${file}" class="card-img-top" alt="">
+						</div>
+						<div class="card-body">
+							<h3 class="card-title" > ${RowNumber},${REF_WP},${CAT1},${CAT2}</h3>
+							<h5 class="card-title" > ${SERIAL_NO} </h5>
+							<p class="card-text">${MEMO_TIME},${xbody}</p>
+							<p class="card-text">${avBegin},${avEnd},${idpt},${xurl}</p>
+							<p class="card-text">${address},${xpostDate}</p>
+							<p class="card-text" > <small class="text-body-secondary" > ${langinfo} ${POI}</small></p >
+							<p class="card-text" > <small class="text-body-secondary" > 交通資訊：${info} </small></p >
+							<p class="card-text" > <small class="text-body-secondary" > 座標：${longitude}"N ${latitude}"E</small></p >
+							<p class="card-text" > <small class="text-body-secondary" > 捷運站：${MRT} </small></p >
+						</div>
+					</div>
+				</div>`;
+			let node = document.createElement('div');
+			node.innerHTML = template;
+			target.appendChild(node.children[0]);
+		};
+		spots.CommonFormat.Section.map((all) => {
+			createhtml(all);
+		})
+
+		// const htmlcreate = spots.CommonFormat.Section.map(item => {
+		// 	const { RowNumber,
+		// 		REF_WP,
+		// 		CAT1,
+		// 		CAT2,
+		// 		SERIAL_NO,
+		// 		MEMO_TIME,
+		// 		stitle,
+		// 		xbody,
+		// 		avBegin,
+		// 		avEnd,
+		// 		idpt,
+		// 		xurl,
+		// 		address,
+		// 		xpostDate,
+		// 		file,
+		// 		langinfo,
+		// 		POI,
+		// 		info,
+		// 		longitude,
+		// 		latitude,
+		// 		MRT 
+		// 	} = item;
+
+
+		// 	return (
+		// 		`<div class="col">
+		// 			<div class="card">
+		// 				<div class="img">
+		// 					${images}
+		// 				</div>
+		// 				<div class="card-body">
+		// 					<h5 class="card-title" > ${RowNumber},${REF_WP},${CAT1},${CAT2},${SERIAL_NO} </h5>
+		// 					<p class="card-text">${MEMO_TIME},${xbody},${avBegin},${avEnd},${idpt},${xurl},${address},${xpostDate}</p>
+		// 					<p class="card-text" > <small class="text-body-secondary" > ${ langinfo } </small></p >
+		// 					<p class="card-text" > <small class="text-body-secondary" > ${ POI } </small></p >
+		// 					<p class="card-text" > <small class="text-body-secondary" > ${ info } </small></p >
+		// 					<p class="card-text" > <small class="text-body-secondary" > ${ longitude } </small></p >
+		// 					<p class="card-text" > <small class="text-body-secondary" > ${ latitude } </small></p >
+		// 					<p class="card-text" > <small class="text-body-secondary" > ${ MRT } </small></p >
+		// 				</div>
+		// 			</div>
+		// 		</div>`
+
+
+		// 	)
+		// });
+		// target.innerHTML = htmlcreate.join("");
+
+
+    </script>
+    
+}
+
