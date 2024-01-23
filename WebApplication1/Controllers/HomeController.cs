@@ -18,6 +18,19 @@ namespace WebApplication1.Controllers
 			return View();
 		}
 
+		public IActionResult First()
+		{
+			return View();
+		}
+		public IActionResult Register()
+		{
+			return View();
+		}
+		public IActionResult Addresss()
+		{
+			return View();
+		}
+
 		public IActionResult Privacy()
 		{
 			return View();

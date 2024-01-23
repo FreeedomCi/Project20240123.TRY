@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "CheckAccount";
+}
+
+<h1>CheckAccount</h1>
+
+<form action="" method="">
+
+	<div class="mb-3">
+        <label for="inputName" class="form-label">姓名：</label>
+        <input type="text" class="form-control" id="inputName">
+        <div id="nameHelp" class="form-text" style="display:none"></div>
+	</div>
+
+    <div class="mb-3">
+        <label for="inputEmail1" class="form-label">信箱：</label>
+        <input type="email" class="form-control" id="inputEmail1" aria-describedby="emailHelp">
+    </div>
+
+    <div class="mb-3">
+        <label for="inputAge" class="form-label">年紀：</label>
+        <input type="text" class="form-control" id="inputAge">
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-3" id="btn1">送出</button>
+</form>
+
+@section Scripts {
+    <script>
+		const targetname = document.querySelector("#inputName");
+        const targetdiv = document.querySelector("#nameHelp");
+		const btn1 = document.querySelector("#btn1");
+
+        targetname.addEventListener("input", async () => {
+            // console.log(targetname.value);
+
+		    let input = targetname.value;
+
+            if (!input || input.trim() == "") {
+                targetdiv.style.display = "none";
+            }
+            else {
+                const response = await fetch(`@Url.Content("~/api/CheckAccount?name=${input}")`);
+                const data = await response.text();
+
+			    // console.log(data);
+
+                if (data == "帳號已存在") {
+                    targetdiv.innerHTML = data;
+				    targetdiv.style.color = "red";
+                    targetdiv.style.display = "inline-block";
+                }
+                else{
+                    targetdiv.innerHTML = data;
+				    targetdiv.style.color = "lightgreen";
+                    targetdiv.style.display = "inline-block";
+                }
+            }
+        });
+    </script>
+}
