@@ -20,12 +20,10 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+        public IActionResult RegisterHW03()
+        {
+            return View();
+        }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult CheckAccount(string name)
-        //{
-
-        //}
     }
 }

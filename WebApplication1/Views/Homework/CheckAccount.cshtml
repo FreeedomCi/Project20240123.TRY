@@ -28,14 +28,14 @@
 
 @section Scripts {
     <script>
-		const targetname = document.querySelector("#inputName");
+        const targetname = document.querySelector("#inputName");
         const targetdiv = document.querySelector("#nameHelp");
-		const btn1 = document.querySelector("#btn1");
+        const btn1 = document.querySelector("#btn1");
 
         targetname.addEventListener("input", async () => {
             // console.log(targetname.value);
 
-		    let input = targetname.value;
+            let input = targetname.value;
 
             if (!input || input.trim() == "") {
                 targetdiv.style.display = "none";
@@ -44,19 +44,20 @@
                 const response = await fetch(`@Url.Content("~/api/CheckAccount?name=${input}")`);
                 const data = await response.text();
 
-			    // console.log(data);
+                // console.log(data);
 
                 if (data == "帳號已存在") {
                     targetdiv.innerHTML = data;
-				    targetdiv.style.color = "red";
+		            targetdiv.style.color = "red";
                     targetdiv.style.display = "inline-block";
                 }
                 else{
                     targetdiv.innerHTML = data;
-				    targetdiv.style.color = "lightgreen";
+		            targetdiv.style.color = "lightgreen";
                     targetdiv.style.display = "inline-block";
                 }
             }
         });
+
     </script>
 }

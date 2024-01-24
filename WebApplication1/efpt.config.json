@@ -34,6 +34,10 @@
       {
          "Name": "[dbo].[Spots]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SpotImagesSpot]",
+         "ObjectType": 3
       }
    ],
    "UiHint": "msi\\sqlexpress.MyDB.dbo",
