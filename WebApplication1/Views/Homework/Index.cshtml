@@ -10,7 +10,7 @@
 	}
 </style>
 
-<h1>景點介紹</h1>
+<h1>作業1：景點介紹</h1>
 
 <div class="row row-cols-1 row-cols-md-3 g-4" id="map"></div>
 
@@ -59,7 +59,7 @@
 						<div class="card-body">
 							<h3 class="card-title" > ${RowNumber},${REF_WP},${CAT1},${CAT2}</h3>
 							<h5 class="card-title" > ${SERIAL_NO} </h5>
-							<p class="card-text">${MEMO_TIME},${xbody}</p>
+							<p class="card-text">${MEMO_TIME},${xbody.length <= 100 ? xbody : xbody.substring(0, 100)}...</p>
 							<p class="card-text">${avBegin},${avEnd},${idpt},${xurl}</p>
 							<p class="card-text">${address},${xpostDate}</p>
 							<p class="card-text" > <small class="text-body-secondary" > ${langinfo} ${POI}</small></p >

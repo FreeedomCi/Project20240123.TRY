@@ -24,6 +24,10 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+        public IActionResult Spotsview()
+        {
+            return View();
+        }
 
     }
 }

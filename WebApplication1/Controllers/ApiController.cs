@@ -203,16 +203,22 @@ namespace WebApplication1.Controllers
 
 			int TotalCount = spots.Count();
 			int pageSize = _search.pageSize ?? 9;
-			int TotalPages = (int)Math.Ceiling(TotalCount / (decimal)pageSize);
+			int TotalPages = (int)Math.Ceiling((decimal)TotalCount/ pageSize);
 			int page = _search.page ?? 1;
 
 			spots = spots.Skip((page - 1) * pageSize).Take(pageSize);
 
 			SpotsPagingdto spotsPaging = new SpotsPagingdto();
-			spotsPaging.TotalPages = TotalCount;
+			spotsPaging.TotalPages = TotalPages;
 			spotsPaging.SpotsResult = spots.ToList();
+			spotsPaging.Categories = _dbContext.Categories.ToList();
 
 			return Json(spotsPaging);
 		}
-	}
+        public IActionResult SpotsTitle(string keyword)
+        {
+            var sports = _dbContext.Spots.Where(s => s.SpotTitle.Contains(keyword)).Select(s => s.SpotTitle).Take(8);
+            return Json(sports);
+        }
+    }
 }

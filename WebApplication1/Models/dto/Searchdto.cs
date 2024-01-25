@@ -5,6 +5,7 @@
 		//搜尋相關
 		public string? keyword { get; set; }
 		public int? catagoryId { get; set; } = 0;
+
 		//排序相關
 		public string? sortBy { get; set; }
 		public string? sortType { get; set; } = "asc";

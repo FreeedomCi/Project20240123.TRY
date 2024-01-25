@@ -5,41 +5,33 @@
 
 <h1>Spots</h1>
 
+
+
 <div class="row mb-3">
     <div class="col-3"></div>
-    <div class="col-6"></div>
+    <div class="col-6">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination"></ul>
+        </nav>
+    </div>
     <div class="col-3">
         <input type="search" id="inputKeyword" class="form-control" placeholder="搜尋" />
     </div>
 
 </div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4" id="spots1">
-
-@*     <div class="col">
-        <div class="card h-100">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-            <div class="card-footer">
-                <small class="text-body-secondary">Last updated 3 mins ago</small>
-            </div>
-        </div>
-    </div>
- *@
-</div>
+<div class="row row-cols-1 row-cols-md-3 g-4" id="spots1"></div>
 
 @section Scripts{
     <script>
         const divspots = document.querySelector("#spots1");
 		const inputKeyword = document.querySelector("#inputKeyword");
+        const ulPaging = document.querySelector(".pagination");
 
         const searchData = {
             "categoryId": 0,
             "keyword": "北投",
-            "page": 2,
+            "page": 1,
             "pageSize": 9,
             "sortType": "asc",
             "sortBy": ""
@@ -54,23 +46,36 @@
                 }
             });
 			const data = await response.json();
+
 			console.log(data);
+
+            let liPaging = "";
+
+            for (i = 1; i <= data.totalPages; i++) {
+                if (i === searchData.page) {
+                    liPaging += `<li class="page-item" onclick="pagingHandler(${i})"><a class="page-link currentPage" href="#">${i}</a></li>`;
+                } else {
+                    liPaging += `<li class="page-item" onclick="pagingHandler(${i})"><a class="page-link" href="#">${i}</a></li>`;
+                }
+            }
+			ulPaging.innerHTML = liPaging;
+
             const cardSpots = data.spotsResult.map(spot => {
                 const { spotId, spotTitle, spotDescription, spotImage, address } = spot;
                 return (
                     `
-            <div class="col">
-                <div class="card h-100">
-                    <img src="${spotImage}" class="card-img-top" alt="${spotTitle}">
-                    <div class="card-body">
-                        <h5 class="card-title">${spotId}. ${spotTitle}</h5>
-                        <p class="card-text">${spotDescription.length <= 100 ? spotDescription : spotDescription.substring(0, 100)}...</p>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="${spotImage}" class="card-img-top" alt="${spotTitle}">
+                        <div class="card-body">
+                            <h5 class="card-title">${spotId}. ${spotTitle}</h5>
+                            <p class="card-text">${spotDescription.length <= 100 ? spotDescription : spotDescription.substring(0, 100)}...</p>
+                        </div>
+                        <div class="card-footer">
+                        <small class="text-body-secondary">${address}</small>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                    <small class="text-body-secondary">${address}</small>
-                    </div>
-                </div>
-            </div>`
+                </div>`
                 )
             });
             divspots.innerHTML = cardSpots.join("");
@@ -84,6 +89,10 @@
             }
 		});
 
+        const pagingHandler = (page) => {
+            searchData.page = page;
+            loadSpots();
+        }
 
 		loadSpots();
 

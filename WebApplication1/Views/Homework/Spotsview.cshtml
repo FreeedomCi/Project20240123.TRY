@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewData["Title"] = "Spotsview";
+}
+
+<style>
+    .card-img-top {
+        height: 300px;
+        object-fit: cover;
+    }
+</style>
+
+
+<h1>台北市景點</h1>
+
+<div class="row mb-3">
+    <div class="col-3">
+        <select class="form-select" aria-label="Default select example" id="selectlist">
+            <option value="12">每頁12筆資料</option>
+            <option value="9" selected>每頁9筆資料</option>
+            <option value="6">每頁6筆資料</option>
+        </select>
+    </div>
+    <div class="col-3">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination"></ul>
+        </nav>
+    </div>
+    <div class="col-3">
+        <select class="form-select" aria-label="Default select example" id="selectorderby">
+            <option value="asc" selected>景點編號升冪</option>
+            <option value="desc">景點編號降冪</option>
+        </select>
+
+    </div>
+    <div class="col-3">
+        <input type="search" id="inputKeyword" class="form-control" placeholder="景點搜尋" />
+    </div>
+
+</div>
+
+<div class="btn-group mb-2 col-12" role="group" aria-label="Basic radio toggle button group" id="selectcategory">
+@*     <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+    <label class="btn btn-outline-primary" for="btnradio1">Radio 1</label>
+ *@
+</div>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4" id="spots1"></div>
+
+@section Scripts {
+    <script>
+        const divspots = document.querySelector("#spots1");
+        const inputKeyword = document.querySelector("#inputKeyword");
+        const ulPaging = document.querySelector(".pagination");
+        const selectlist = document.querySelector("#selectlist");
+		const selectorderby = document.querySelector("#selectorderby");
+		const selectcategory = document.querySelector("#selectcategory");
+
+
+        const searchData = {
+            "categoryId": 0,
+            "keyword": "北投",
+            "page": 1,
+            "pageSize": 9,
+            "sortType": "asc",
+            "sortBy": ""
+        };
+
+        const loadSpots = async () => {
+            const response = await fetch('@Url.Content("~/api/Spots")', {
+                method: 'POST',
+                body: JSON.stringify(searchData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+
+            console.log(data);
+
+            let liPaging = "";
+
+            for (i = 1; i <= data.totalPages; i++) {
+                if (i === searchData.page) {
+                    liPaging += `<li class="page-item" onclick="pagingHandler(${i})"><a class="page-link currentPage" href="#">${i}</a></li>`;
+                } else {
+                    liPaging += `<li class="page-item" onclick="pagingHandler(${i})"><a class="page-link" href="#">${i}</a></li>`;
+                }
+            }
+            ulPaging.innerHTML = liPaging;
+
+            const cardSpots = data.spotsResult.map(spot => {
+                const { spotId, spotTitle, spotDescription, spotImage, address } = spot;
+                return (
+                    `<div class="col">
+                        <div class="card h-100">
+                            <img src="${spotImage}" class="card-img-top" alt="${spotTitle}">
+                            <div class="card-body">
+                                <h5 class="card-title">${spotId}. ${spotTitle}</h5>
+                                <p class="card-text">${spotDescription.length <= 100 ? spotDescription : spotDescription.substring(0, 100)}...</p>
+                            </div>
+                            <div class="card-footer">
+                            <small class="text-body-secondary">${address}</small>
+                            </div>
+                        </div>
+                    </div>`
+                )
+            });
+            divspots.innerHTML = cardSpots.join("");
+
+            const spotscategory = data.categories.map(category => {
+				const { categoryId, categoryName } = category;
+                return(
+                    `<input type="radio" class="btn-check" name="btnradio" id="btnradio${categoryId}" autocomplete="off" onclick="clickHandler('${categoryId}')">
+                <label class="btn btn-outline-primary" for="btnradio${categoryId}">${categoryName}</label>`
+                )
+			});
+			selectcategory.innerHTML = spotscategory.join("");
+        }
+
+
+
+        inputKeyword.addEventListener("keydown", event => {
+            if (event.key === "Enter") {
+                searchData.keyword = event.target.value;
+                searchData.page = 1;
+                loadSpots();
+            }
+        });
+
+
+        selectlist.addEventListener("change", event => {
+            searchData.pageSize = event.target.value;
+            loadSpots();
+        })
+
+        selectorderby.addEventListener("change", event => {
+            searchData.sortType = event.target.value;
+            loadSpots();
+        })
+
+
+        const pagingHandler = (page) => {
+            searchData.page = page;
+            loadSpots();
+        }
+
+
+        loadSpots();
+
+    </script>
+}
+
